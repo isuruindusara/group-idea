@@ -1,0 +1,560 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Group Idea Board</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      :root {
+        --bg: #f0ece4;
+        --card: #fffdf8;
+        --ink: #1a1714;
+        --muted: #7a746a;
+        --accent: #d4541a;
+        --accent2: #2e5c8a;
+        --tag-bg: #fde8dc;
+        --tag2-bg: #dceaf5;
+        --border: #e0d8ce;
+        --shadow: 0 4px 24px rgba(26, 23, 20, 0.08);
+      }
+
+      body {
+        font-family: "DM Sans", sans-serif;
+        background: var(--bg);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        color: var(--ink);
+      }
+
+      /* ── HEADER ── */
+      header {
+        background: var(--ink);
+        color: #fff;
+        padding: 18px 40px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+      }
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .logo-icon {
+        width: 36px;
+        height: 36px;
+        background: var(--accent);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+      }
+      .logo-text {
+        font-family: "Syne", sans-serif;
+        font-weight: 800;
+        font-size: 1.15rem;
+        letter-spacing: -0.02em;
+      }
+      .header-badge {
+        font-size: 0.78rem;
+        background: rgba(255, 255, 255, 0.12);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        padding: 4px 12px;
+        border-radius: 20px;
+        color: rgba(255, 255, 255, 0.7);
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+
+      /* ── MAIN ── */
+      main {
+        flex: 1;
+        padding: 48px 24px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 28px;
+      }
+
+      .headline {
+        text-align: center;
+      }
+      .headline h1 {
+        font-family: "Syne", sans-serif;
+        font-size: clamp(2rem, 5vw, 3rem);
+        font-weight: 800;
+        letter-spacing: -0.04em;
+        line-height: 1.1;
+      }
+      .headline h1 span {
+        color: var(--accent);
+      }
+      .headline p {
+        margin-top: 8px;
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+
+      /* ── STATS STRIP ── */
+      .stats-strip {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      .stat-pill {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 30px;
+        padding: 8px 20px;
+        font-size: 0.85rem;
+        color: var(--muted);
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        box-shadow: var(--shadow);
+        transition: transform 0.15s;
+      }
+      .stat-pill strong {
+        color: var(--ink);
+        font-weight: 600;
+      }
+      .stat-pill .dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--accent);
+        flex-shrink: 0;
+      }
+
+      /* ── CARD ── */
+      .card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        box-shadow: var(--shadow);
+        width: 100%;
+        max-width: 680px;
+        overflow: hidden;
+      }
+
+      /* ── INPUT SECTION ── */
+      .input-section {
+        padding: 28px 28px 20px;
+        border-bottom: 1px solid var(--border);
+      }
+      .input-section label {
+        display: block;
+        font-size: 0.78rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+        color: var(--muted);
+        margin-bottom: 10px;
+      }
+      .input-row {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+      select,
+      input[type="text"] {
+        font-family: "DM Sans", sans-serif;
+        font-size: 0.9rem;
+        padding: 11px 14px;
+        border: 1.5px solid var(--border);
+        border-radius: 10px;
+        background: var(--bg);
+        color: var(--ink);
+        outline: none;
+        transition:
+          border-color 0.2s,
+          box-shadow 0.2s;
+        appearance: none;
+      }
+      select:focus,
+      input[type="text"]:focus {
+        border-color: var(--accent2);
+        box-shadow: 0 0 0 3px rgba(46, 92, 138, 0.12);
+      }
+      select {
+        min-width: 160px;
+        cursor: pointer;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237a746a' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 12px center;
+        padding-right: 32px;
+      }
+      input[type="text"] {
+        flex: 1;
+        min-width: 180px;
+      }
+      input[type="text"]::placeholder {
+        color: #b0a99e;
+      }
+
+      .btn-add {
+        font-family: "Syne", sans-serif;
+        font-weight: 700;
+        font-size: 0.9rem;
+        padding: 11px 22px;
+        background: var(--accent);
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        letter-spacing: 0.01em;
+        transition:
+          background 0.18s,
+          transform 0.12s,
+          box-shadow 0.18s;
+        white-space: nowrap;
+        box-shadow: 0 2px 8px rgba(212, 84, 26, 0.3);
+      }
+      .btn-add:hover {
+        background: #b84214;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 16px rgba(212, 84, 26, 0.35);
+      }
+      .btn-add:active {
+        transform: translateY(0);
+      }
+      .btn-add:disabled {
+        background: #ccc;
+        box-shadow: none;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      /* ── LIST ── */
+      .list-section {
+        padding: 20px 28px 28px;
+      }
+      .list-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 14px;
+      }
+      .list-header span {
+        font-size: 0.78rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+        color: var(--muted);
+      }
+      .btn-clear {
+        font-family: "DM Sans", sans-serif;
+        font-size: 0.78rem;
+        padding: 5px 12px;
+        border: 1.5px solid var(--border);
+        border-radius: 7px;
+        background: transparent;
+        color: var(--muted);
+        cursor: pointer;
+        transition: all 0.15s;
+      }
+      .btn-clear:hover {
+        border-color: #c0392b;
+        color: #c0392b;
+      }
+
+      #ideas-list {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        min-height: 60px;
+      }
+
+      .idea-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 14px 16px;
+        background: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        animation: slideIn 0.25s ease;
+        transition: box-shadow 0.15s;
+      }
+      .idea-item:hover {
+        box-shadow: 0 2px 12px rgba(26, 23, 20, 0.08);
+      }
+
+      @keyframes slideIn {
+        from {
+          opacity: 0;
+          transform: translateY(-6px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .idea-num {
+        font-family: "Syne", sans-serif;
+        font-size: 0.72rem;
+        font-weight: 700;
+        color: var(--muted);
+        min-width: 22px;
+        padding-top: 2px;
+      }
+      .idea-body {
+        flex: 1;
+      }
+      .idea-text {
+        font-size: 0.92rem;
+        font-weight: 500;
+        line-height: 1.4;
+      }
+      .idea-meta {
+        margin-top: 4px;
+        font-size: 0.78rem;
+        color: var(--muted);
+      }
+      .idea-meta .name-tag {
+        display: inline-block;
+        background: var(--tag-bg);
+        color: var(--accent);
+        font-weight: 600;
+        padding: 1px 8px;
+        border-radius: 5px;
+        font-size: 0.75rem;
+      }
+      .idea-time {
+        font-size: 0.72rem;
+        color: #b0a99e;
+        white-space: nowrap;
+        padding-top: 2px;
+      }
+      .btn-remove {
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: #c8c0b6;
+        font-size: 1rem;
+        padding: 2px 4px;
+        border-radius: 5px;
+        transition:
+          color 0.15s,
+          background 0.15s;
+        line-height: 1;
+      }
+      .btn-remove:hover {
+        color: #c0392b;
+        background: #fde8dc;
+      }
+
+      .empty-state {
+        text-align: center;
+        padding: 32px 16px;
+        color: var(--muted);
+        font-size: 0.88rem;
+        border: 2px dashed var(--border);
+        border-radius: 12px;
+      }
+      .empty-state .emoji {
+        font-size: 2rem;
+        display: block;
+        margin-bottom: 8px;
+      }
+
+      /* ── FOOTER ── */
+      footer {
+        background: var(--ink);
+        color: rgba(255, 255, 255, 0.45);
+        text-align: center;
+        padding: 18px 24px;
+        font-size: 0.78rem;
+        letter-spacing: 0.04em;
+      }
+      footer strong {
+        color: rgba(255, 255, 255, 0.7);
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="logo">
+        <div class="logo-icon">💡</div>
+        <span class="logo-text">IdeaBoard</span>
+      </div>
+      <span class="header-badge">Day 03 · Group Task</span>
+    </header>
+
+    <main>
+      <div class="headline">
+        <h1>Share Your <span>Ideas</span></h1>
+        <p>Add your ideas below — everyone can contribute!</p>
+      </div>
+
+      <div class="stats-strip">
+        <div class="stat-pill">
+          <span class="dot"></span> Total Ideas:
+          <strong id="total-count">0</strong>
+        </div>
+        <div class="stat-pill">
+          <span class="dot" style="background: var(--accent2)"></span>
+          Contributors: <strong id="contributor-count">0</strong>
+        </div>
+        <div class="stat-pill">
+          <span class="dot" style="background: #27ae60"></span> Session Active
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="input-section">
+          <label>Submit Your Idea</label>
+          <div class="input-row">
+            <select id="name-select">
+              <option value="">Select your name…</option>
+              <option>Nirma</option>
+              <option>Kavindu</option>
+              <option>Nimesh</option>
+              <option>Venuja</option>
+              <option>Isuru</option>
+              <option>Arhan</option>
+              <option>Roshit</option>
+              <option>Nimsarani</option>
+              <option>Yugani</option>
+              <option>Pamodi</option>
+            </select>
+            <input
+              type="text"
+              id="idea-input"
+              placeholder="Enter your idea here…"
+              maxlength="120"
+            />
+            <button class="btn-add" id="add-btn" onclick="addIdea()" disabled>
+              Add Idea
+            </button>
+          </div>
+        </div>
+
+        <div class="list-section">
+          <div class="list-header">
+            <span>Ideas</span>
+            <button class="btn-clear" onclick="clearAll()">Clear All</button>
+          </div>
+          <ul id="ideas-list">
+            <li class="empty-state">
+              <span class="emoji">🌱</span>
+              No ideas yet — be the first to contribute!
+            </li>
+          </ul>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      Built for <strong>Day 03</strong> · Group Idea Board · Using AI Tools
+    </footer>
+
+    <script>
+      const ideas = [
+        { text: "Build a study planner", name: "Nirma", time: "09:01" },
+        { text: "Start a podcast", name: "Venuja", time: "09:03" },
+        { text: "Organize a coding workshop", name: "Arham", time: "09:07" },
+      ];
+
+      const nameSelect = document.getElementById("name-select");
+      const ideaInput = document.getElementById("idea-input");
+      const addBtn = document.getElementById("add-btn");
+
+      function checkReady() {
+        addBtn.disabled = !(nameSelect.value && ideaInput.value.trim());
+      }
+      nameSelect.addEventListener("change", checkReady);
+      ideaInput.addEventListener("input", checkReady);
+      ideaInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" && !addBtn.disabled) addIdea();
+      });
+
+      function now() {
+        const d = new Date();
+        return (
+          d.getHours().toString().padStart(2, "0") +
+          ":" +
+          d.getMinutes().toString().padStart(2, "0")
+        );
+      }
+
+      function addIdea() {
+        const text = ideaInput.value.trim();
+        const name = nameSelect.value;
+        if (!text || !name) return;
+        ideas.push({ text, name, time: now() });
+        ideaInput.value = "";
+        checkReady();
+        render();
+      }
+
+      function removeIdea(i) {
+        ideas.splice(i, 1);
+        render();
+      }
+
+      function clearAll() {
+        if (ideas.length === 0) return;
+        if (confirm("Clear all ideas? This cannot be undone.")) {
+          ideas.length = 0;
+          render();
+        }
+      }
+
+      function render() {
+        const list = document.getElementById("ideas-list");
+        document.getElementById("total-count").textContent = ideas.length;
+        const unique = new Set(ideas.map((i) => i.name)).size;
+        document.getElementById("contributor-count").textContent = unique;
+
+        if (ideas.length === 0) {
+          list.innerHTML = `<li class="empty-state"><span class="emoji">🌱</span>No ideas yet — be the first to contribute!</li>`;
+          return;
+        }
+        list.innerHTML = ideas
+          .map(
+            (idea, i) => `
+        <li class="idea-item">
+          <span class="idea-num">#${String(i + 1).padStart(2, "0")}</span>
+          <div class="idea-body">
+            <div class="idea-text">${escHtml(idea.text)}</div>
+            <div class="idea-meta">suggested by <span class="name-tag">${escHtml(idea.name)}</span></div>
+          </div>
+          <span class="idea-time">${idea.time}</span>
+          <button class="btn-remove" onclick="removeIdea(${i})" title="Remove">✕</button>
+        </li>
+      `,
+          )
+          .join("");
+      }
+
+      function escHtml(s) {
+        return s
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;");
+      }
+
+      render();
+    </script>
+  </body>
+</html>
